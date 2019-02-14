@@ -5,7 +5,7 @@ import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 global.iphoneXPaddingTop = 44;
 global.iphoneCommonPaddingTop = 5;
 //程序主色调
-global.mainColor = "#fea6a5";
+global.mainColor = "#EF8A96";
 //程序域名
 global.webServer = "http://local.suki-suki.me:8000/";
 // global.webServer = "https://sukisuki.org/";
