@@ -52,60 +52,66 @@ export default class home_page extends Component  {
             // alert(JSON.stringify(responseJson.data));
             // AsyncStorage.setItem('user_center_data'+UserToken,JSON.stringify(responseJson.data));
             let setting = JSON.parse(responseJson.data.setting)
-            // console.log(setting)
+            // setting.lolita_viewing_forum = JSON.parse(responseJson.data.setting.lolita_viewing_forum);
+            setting.lolita_viewing_forum = JSON.parse(setting.lolita_viewing_forum);
+            console.log(setting.lolita_viewing_forum)
+        
             // console.log( typeof setting)
             // AsyncStorage.setItem("homePageData",JSON.stringify(responseJson.data));
             this.setState({
                 forumList   : responseJson.data.suki_forum,
                 threads     : responseJson.data.suki_threads,
-                setting     : responseJson.data.setting,
+                setting     : setting,
                 selectedForum : setting.lolita_viewing_forum ? setting.lolita_viewing_forum : []
             });
         });
     };
 
     //设置浏览板块
-    setMySetting = async (fid) => {
+    setMySetting = (fid) => {
+        if (!fid)
+        {
+            alert("fid空");
+            return false;
+        }
         let setting = this.state.setting;
+        let selectedForum = this.state.selectedForum;
         fid = parseInt(fid);
         let index = setting.lolita_viewing_forum.indexOf(fid);
-        if (index == -1) // add
-            setting.lolita_viewing_forum.push(fid);
+        if (index === -1) // add
+            selectedForum.push(fid);
         else if (index > -1) //remove
         {
             if (setting.lolita_viewing_forum.length > 1)
-                setting.lolita_viewing_forum.splice(index,1);
+            {
+                selectedForum.splice(index,1);
+            }
             else
-                alert("最少保留一个")
+                alert("最少保留一个查看的分区")
         }
-        this.setState({
-            setting : setting,
-            selectedForum : JSON.stringify(responseJson.data.setting).lolita_viewing_forum
-        });
         //刷新板块帖子
         let sukiThreadUrl = global.webServer + "suki-thread";
-        let lolitaViewingForum = JSON.stringify(responseJson.data.setting).lolita_viewing_forum;
-        let body = {'view_forum':lolitaViewingForum ,'need' : "json"};
+        let body = JSON.stringify({'view_forum':selectedForum,'need' : "json"});
+        console.log(body);
         fetch(sukiThreadUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-
+                'Content-Type': 'application/json',
             },
             credentials: 'include', //带cookie
             body: body
+        }).then((response) => {
+            return response;
         }).then((response) => response.json()).then((responseJson) =>
         {
-            // this.setState({user_center_data : responseJson.data,is_login:true,user_token:UserToken});
-            // alert(JSON.stringify(responseJson.data));
-            // AsyncStorage.setItem('user_center_data'+UserToken,JSON.stringify(responseJson.data));
-            // console.log(responseJson)
-            // AsyncStorage.setItem("homePageData",JSON.stringify(responseJson.data));
-            // this.setState({
-            //     forumList   : responseJson.data.suki_forum,
-            //     threads     : responseJson.data.suki_threads,
-            //     setting     : JSON.stringify(responseJson.data.setting)
-            // });
+            console.log(responseJson);
+            this.setState({
+                threads     : responseJson.data.thread,
+                selectedForum : selectedForum
+            });
+        }).catch(function (err) {
+            console.log(err);
+            
         });
     };
     // async sukiThreadetNextPage = () => {
@@ -165,7 +171,7 @@ export default class home_page extends Component  {
 
                                                     <TouchableOpacity
                                                         style={this.state.selectedForum && this.state.selectedForum.indexOf(item.fid) > -1 ? styles.forumBtnSelected : styles.forumBtn}
-                                                        onPress={()=>{}}>
+                                                        onPress={()=>{this.setMySetting(item.fid)}}>
                                                         <View style={{backgroundColor:"#ffffff",alignItems:"center",shadowOffset: {width: 0, height: 3},
                                                             shadowOpacity: 0.5,
                                                             shadowRadius: 2,
@@ -194,7 +200,7 @@ export default class home_page extends Component  {
                         }}
                         data={this.state.threads}
                         keyExtractor = { (item) =>  "key" + item.tid}
-                        style={{marginTop:10, height:50, flex:1,backgroundColor:"#fafafa"}}
+                        style={{marginTop:10,flex:1,backgroundColor:"#fafafa"}}
                         // numColumns={5}
                         // showsHorizontalScrollIndicator= {false}//隐藏水平滚动条
                         showsVerticalScrollIndicator= {false}//隐藏竖直滚动条
@@ -280,7 +286,7 @@ const styles = StyleSheet.create({
     forumBtn : {
         margin:10,height:80,alignItems:"center",
         paddingTop:5,
-
+        borderWidth:2, borderRadius:5,borderColor: "#fafafa",
     },
     forumBtnSelected : {
         margin:10,height:80, borderWidth:2, borderRadius:5,
