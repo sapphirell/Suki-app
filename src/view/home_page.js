@@ -25,6 +25,9 @@ export default class home_page extends Component  {
         threads         : [],
         setting         : [],
         selectedForum   : [],
+        nowPage         : 1,
+        netWork         : 0,
+        sukiThreadOnFresh : false,
     };
  
     async componentDidMount() {
@@ -62,7 +65,8 @@ export default class home_page extends Component  {
                 forumList   : responseJson.data.suki_forum,
                 threads     : responseJson.data.suki_threads,
                 setting     : setting,
-                selectedForum : setting.lolita_viewing_forum ? setting.lolita_viewing_forum : []
+                selectedForum : setting.lolita_viewing_forum ? setting.lolita_viewing_forum : [],
+
             });
         });
     };
@@ -114,6 +118,76 @@ export default class home_page extends Component  {
             
         });
     };
+    //上拉加载下一页
+    getNextPage = async () => {
+        let sukiThreadUrl = global.webServer + "suki-thread";
+        let body = JSON.stringify({'view_forum':this.state.selectedForum,'need' : "json","page":this.state.nowPage+1});
+        if (this.state.netWork === 0)
+        {
+            await this.setState({netWork:1});
+            fetch(sukiThreadUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include', //带cookie
+                body: body
+            }).then((response) => {
+                return response;
+            }).then((response) => response.json()).then((responseJson) =>
+            {
+                console.log(responseJson);
+                this.setState({
+                    threads     : this.state.threads.concat(responseJson.data.thread),
+                    nowPage : this.state.nowPage +1,
+                    netWork:0
+                });
+            }).catch(function (err) {
+                console.log(err);
+                this.setState({netWork:0})
+            });
+        }
+        else
+        {
+            console.log("繁忙中");
+        }
+        
+    };
+    //下拉重载帖子
+    sukiThreadReload = async () => {
+        let sukiThreadUrl = global.webServer + "suki-thread";
+        let body = JSON.stringify({'view_forum':this.state.selectedForum,'need' : "json","page":1});
+        if (this.state.netWork === 0)
+        {
+            await this.setState({netWork:1});
+            fetch(sukiThreadUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include', //带cookie
+                body: body
+            }).then((response) => {
+                return response;
+            }).then((response) => response.json()).then((responseJson) =>
+            {
+                console.log(responseJson);
+                this.setState({
+                    threads     : responseJson.data.thread,
+                    nowPage : 1,
+                    netWork : 0
+                });
+            }).catch(function (err) {
+                console.log(err);
+                this.setState({netWork:0})
+            });
+        }
+        else
+        {
+            console.log("繁忙中");
+        }
+    };
+
     // async sukiThreadetNextPage = () => {
     //
     // };
@@ -200,15 +274,15 @@ export default class home_page extends Component  {
                         }}
                         data={this.state.threads}
                         keyExtractor = { (item) =>  "key" + item.tid}
-                        style={{marginTop:10,flex:1,backgroundColor:"#fafafa"}}
+                        style={{marginTop:10,flex:1,backgroundColor:"#fafafa",height:height}}
                         // numColumns={5}
                         // showsHorizontalScrollIndicator= {false}//隐藏水平滚动条
                         showsVerticalScrollIndicator= {false}//隐藏竖直滚动条
-                        // onEndReached = {this.fetchMore}
-                        // onEndReachedThreshold = {0.1}
+                        onEndReached = {this.getNextPage}
+                        onEndReachedThreshold = {0.2}
                         extraData={this.state}
-                        // onRefresh={this.refreshingData}
-                        // refreshing={this.state.isRefresh}
+                        onRefresh={this.sukiThreadReload}
+                        refreshing={this.state.sukiThreadOnFresh}
                         contentContainerStyle={{justifyContent:"space-between"}}
                         // horizontal={true} //水平布局
                         renderItem= {
@@ -240,10 +314,9 @@ export default class home_page extends Component  {
                                                 {
                                                     item.subject_images  &&
                                                     item.subject_images.map(
-                                                        (content) => {
-                                                            // console.log(content)
+                                                        (content,key) => {
                                                             return (
-                                                                <Image key={content} source={{uri: content}} style={{width: (main_width-30)/3, height: (main_width-30)/3,margin:5}} />
+                                                                <Image key={item.tid+content+key} source={{uri: content}} style={{width: (main_width-30)/3, height: (main_width-30)/3,margin:5}} />
                                                             )
                                                         }
                                                     )
