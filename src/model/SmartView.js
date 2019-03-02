@@ -54,7 +54,7 @@ export default class SmartView extends Component  {
                     hidden={false}  //是否隐藏状态栏。
                     backgroundColor={'black'} //状态栏的背景色
                     // translucent={true}//指定状态栏是否透明。设置为true时，应用会在状态栏之下绘制（即所谓“沉浸式”——被状态栏遮住一部分）。常和带有半透明背景色的状态栏搭配使用。
-                    barStyle={'light-content'} // enum('default', 'light-content', 'dark-content')
+                    barStyle={this.props.barStyle ? this.props.barStyle : 'light-content'} // enum('default', 'light-content', 'dark-content')
                 >
                 </StatusBar>
                 {this.props.children}

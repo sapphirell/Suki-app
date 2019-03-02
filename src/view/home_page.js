@@ -1,8 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+
 import React, { Component } from 'react';
 import {
     Text,
@@ -17,6 +13,7 @@ import {
 } from 'react-native';
 let {height, width} = Dimensions.get('window');
 let main_width = width-20;
+let main_height = height - 170;
 import SmartView from  "../model/SmartView"
 export default class home_page extends Component  {
     state = {
@@ -28,6 +25,7 @@ export default class home_page extends Component  {
         nowPage         : 1,
         netWork         : 0,
         sukiThreadOnFresh : false,
+        tabShow         : "推荐"
     };
  
     async componentDidMount() {
@@ -195,144 +193,161 @@ export default class home_page extends Component  {
     render() {
 
         return (
-                <SmartView >
+                <SmartView
+                    // barStyle="light-content"
+                >
                     <View style={{backgroundColor:global.mainColor, padding:10,flexDirection: "row",justifyContent:"space-between",
                         shadowOffset: {width: 2, height: 5},
                         shadowOpacity: 0.5,
                         shadowRadius: 3,
                         shadowColor: "#ff00004f",
                         elevation: 2,
-                        paddingBottom:5
+                        paddingBottom:10,
+                        paddingTop:10
                     }}>
                         <Image   source={source=require('../image/logo.png')}
                                  style={{width: 60, height:25}} />
                         <View style={{flexDirection:"row"}}>
-                            <TouchableOpacity>
-                                <Text style={styles.homePageTabTextSelected}>推荐</Text>
+                            <TouchableOpacity style={ this.state.tabShow === "推荐" ? styles.homePageTabBtnSelect : styles.homePageTabBtn}
+                                              onPress={()=>this.setState({tabShow:"推荐"})}>
+                                <Text style={styles.homePageTabText}>推荐</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity style={this.state.tabShow === "关注" ? styles.homePageTabBtnSelect : styles.homePageTabBtn}
+                                              onPress={()=>this.setState({tabShow:"关注"})}
+                            >
                                 <Text style={styles.homePageTabText}>关注</Text>
                             </TouchableOpacity>
                         </View>
                         <TouchableOpacity>
-                            <Text style={{width:40}}>搜索</Text>
+                            <Image source={source = require('../image/search.png')}
+                                   style={{width: 20, height:20,marginRight:10}}
+                            />
                         </TouchableOpacity>
                     </View>
                     {/*banner*/}
 
-                    {/*帖子列表*/}
-                    <FlatList
-                        ListHeaderComponent={()=>{
-                            return (
-                                <View style={{height:120,backgroundColor:"#fafafa"}}>
-                                    <FlatList
-                                        data={this.state.forumList}
-                                        keyExtractor = { (item) =>  item.name}
-                                        style={{padding:5,marginTop:0, flex:1}}
-                                        // numColumns={5}
-                                        showsHorizontalScrollIndicator= {false}//隐藏水平滚动条
-                                        showsVerticalScrollIndicator= {false}//隐藏竖直滚动条
-                                        // onEndReached = {this.fetchMore}
-                                        // onEndReachedThreshold = {0.1}
-                                        extraData={this.state}
-                                        // onRefresh={this.refreshingData}
-                                        // refreshing={this.state.isRefresh}
-                                        contentContainerStyle={{justifyContent:"space-between"}}
-                                        horizontal={true} //水平布局
-                                        renderItem= {
-                                            ({item}) => {
-                                                return (
-
-                                                    <TouchableOpacity
-                                                        style={this.state.selectedForum && this.state.selectedForum.indexOf(item.fid) > -1 ? styles.forumBtnSelected : styles.forumBtn}
-                                                        onPress={()=>{this.setMySetting(item.fid)}}>
-                                                        <View style={{backgroundColor:"#ffffff",alignItems:"center",shadowOffset: {width: 0, height: 3},
-                                                            shadowOpacity: 0.5,
-                                                            shadowRadius: 2,
-                                                            shadowColor: "#0000004d",
-                                                            elevation: 2,
-                                                            borderRadius:5,
-                                                            width:40,
-                                                            height:40,
-                                                        }}>
-                                                            <Image source={{uri: item.appimage}} style={{width: 30, height: 30,
-                                                                margin:5
-                                                            }} />
-                                                        </View>
-
-                                                        <Text style={{fontSize:12,fontWeight:"600",padding:5,marginTop:10,width:50,textAlign:"center",color: "#7B6164"}}>
-                                                            {item.name}
-                                                        </Text>
-
-                                                    </TouchableOpacity>
-                                                )
-                                            }
-                                        }
-                                    />
-                                </View>
-                            );
-                        }}
-                        data={this.state.threads}
-                        keyExtractor = { (item) =>  "key" + item.tid}
-                        style={{marginTop:10,flex:1,backgroundColor:"#fafafa",height:height}}
-                        // numColumns={5}
-                        // showsHorizontalScrollIndicator= {false}//隐藏水平滚动条
-                        showsVerticalScrollIndicator= {false}//隐藏竖直滚动条
-                        onEndReached = {this.getNextPage}
-                        onEndReachedThreshold = {0.2}
-                        extraData={this.state}
-                        onRefresh={this.sukiThreadReload}
-                        refreshing={this.state.sukiThreadOnFresh}
-                        contentContainerStyle={{justifyContent:"space-between"}}
-                        // horizontal={true} //水平布局
-                        renderItem= {
-                            ({item}) => {
+                    {this.state.tabShow === "推荐" &&
+                    <View style={{zIndex:1,height:height-170}}>
+                        {/*帖子列表*/}
+                        <FlatList
+                            ListHeaderComponent={()=>{
                                 return (
-                                    <View style={{padding:10,marginBottom:5,backgroundColor:"#ffffff"}} >
-                                        <TouchableOpacity onPress={()=>{}} style={{flexDirection:"row",width:main_width}}>
-                                            <Image source={{uri: item.avatar}} style={{width: 40, height: 40,
-                                                margin:5,borderRadius:20
-                                            }} />
-                                            <View style={{paddingLeft:5}}>
-                                                <View style={{marginTop:5,marginLeft:5,flexDirection:"row",justifyContent:"space-between"}}>
-                                                    <Text style={{width:main_width-130,color:"#7B6164",}}>{item.author}</Text>
-                                                    <Text style={{fontSize:11,color:"#999999"}}>{item.sim_time}</Text>
+                                    <View style={{height:120,backgroundColor:"#fafafa"}}>
+                                        <FlatList
+                                            data={this.state.forumList}
+                                            keyExtractor = { (item) =>  item.name}
+                                            style={{padding:5,marginTop:0, flex:1}}
+                                            // numColumns={5}
+                                            showsHorizontalScrollIndicator= {false}//隐藏水平滚动条
+                                            showsVerticalScrollIndicator= {false}//隐藏竖直滚动条
+                                            // onEndReached = {this.fetchMore}
+                                            // onEndReachedThreshold = {0.1}
+                                            extraData={this.state}
+                                            // onRefresh={this.refreshingData}
+                                            // refreshing={this.state.isRefresh}
+                                            contentContainerStyle={{justifyContent:"space-between"}}
+                                            horizontal={true} //水平布局
+                                            renderItem= {
+                                                ({item}) => {
+                                                    return (
 
+                                                        <TouchableOpacity
+                                                            style={this.state.selectedForum && this.state.selectedForum.indexOf(item.fid) > -1 ? styles.forumBtnSelected : styles.forumBtn}
+                                                            onPress={()=>{this.setMySetting(item.fid)}}>
+                                                            <View style={{backgroundColor:"#ffffff",alignItems:"center",shadowOffset: {width: 0, height: 3},
+                                                                shadowOpacity: 0.5,
+                                                                shadowRadius: 2,
+                                                                shadowColor: "#0000004d",
+                                                                elevation: 2,
+                                                                borderRadius:5,
+                                                                width:40,
+                                                                height:40,
+                                                            }}>
+                                                                <Image source={{uri: item.appimage}} style={{width: 30, height: 30,
+                                                                    margin:5
+                                                                }} />
+                                                            </View>
+
+                                                            <Text style={{fontSize:12,fontWeight:"600",padding:5,marginTop:10,width:50,textAlign:"center",color: "#7B6164"}}>
+                                                                {item.name}
+                                                            </Text>
+
+                                                        </TouchableOpacity>
+                                                    )
+                                                }
+                                            }
+                                        />
+                                    </View>
+                                );
+                            }}
+                            data={this.state.threads}
+                            keyExtractor = { (item) =>  "key" + item.tid}
+                            style={{marginTop:10,flex:1,backgroundColor:"#fafafa",height:height,}}
+                            // numColumns={5}
+                            // showsHorizontalScrollIndicator= {false}//隐藏水平滚动条
+                            showsVerticalScrollIndicator= {false}//隐藏竖直滚动条
+                            onEndReached = {this.getNextPage}
+                            onEndReachedThreshold = {0.2}
+                            extraData={this.state}
+                            onRefresh={this.sukiThreadReload}
+                            refreshing={this.state.sukiThreadOnFresh}
+                            contentContainerStyle={{justifyContent:"space-between", paddingBottom:0}}
+                            // horizontal={true} //水平布局
+                            renderItem= {
+                                ({item}) => {
+                                    return (
+                                        <View style={{padding:10,marginBottom:5,backgroundColor:"#ffffff"}} >
+                                            <TouchableOpacity onPress={()=>{}} style={{flexDirection:"row",width:main_width}}>
+                                                <Image source={{uri: item.avatar}} style={{width: 40, height: 40,
+                                                    margin:5,borderRadius:20
+                                                }} />
+                                                <View style={{paddingLeft:5}}>
+                                                    <View style={{marginTop:5,marginLeft:5,flexDirection:"row",justifyContent:"space-between"}}>
+                                                        <Text style={{width:main_width-130,color:"#7B6164",}}>{item.author}</Text>
+                                                        <Text style={{fontSize:11,color:"#999999"}}>{item.sim_time}</Text>
+
+                                                    </View>
+                                                    <Text style={{marginTop:7,marginLeft:5, color:"#999999",fontSize:12,}}>{item.suki_fname} · 评论 {item.views} · 点赞 {item.star}</Text>
                                                 </View>
-                                                <Text style={{marginTop:7,marginLeft:5, color:"#999999",fontSize:12,}}>{item.suki_fname} · 评论 {item.views} · 点赞 {item.star}</Text>
-                                            </View>
 
-                                        </TouchableOpacity>
-                                        <View style={{backgroundColor:"#fff",alignItems:"center",width:main_width}}>
-                                            { item.preview != "" &&
+                                            </TouchableOpacity>
+                                            <View style={{backgroundColor:"#fff",alignItems:"center",width:main_width}}>
+                                                { item.preview != "" &&
                                                 <Text numberOfLines={2} style={{color:"#7B6164",fontWeight:"600",padding:5,marginTop:10,width:main_width,fontSize:12}}>
                                                     {item.preview}
                                                 </Text>
-                                            }
-
-                                            <View style={{width:main_width,flexDirection:"row"}}>
-                                                {
-                                                    item.subject_images  &&
-                                                    item.subject_images.map(
-                                                        (content,key) => {
-                                                            return (
-                                                                <Image key={item.tid+content+key} source={{uri: content}} style={{width: (main_width-30)/3, height: (main_width-30)/3,margin:5}} />
-                                                            )
-                                                        }
-                                                    )
                                                 }
+
+                                                <View style={{width:main_width,flexDirection:"row"}}>
+                                                    {
+                                                        item.subject_images  &&
+                                                        item.subject_images.map(
+                                                            (content,key) => {
+                                                                return (
+                                                                    <Image key={item.tid+content+key} source={{uri: content}} style={{width: (main_width-30)/3, height: (main_width-30)/3,margin:5}} />
+                                                                )
+                                                            }
+                                                        )
+                                                    }
+                                                </View>
+
+
+
                                             </View>
 
 
-
                                         </View>
-
-
-                                    </View>
-                                )
+                                    )
+                                }
                             }
-                        }
-                    />
+                        />
+                    </View>
+                    }
+                    {this.state.tabShow === "推荐" &&
+                        <View style={{zIndex:1,height:height-170}}>
+                            <Text>关注</Text>
+                        </View>
+                    }
                 </SmartView>
 
         );
@@ -343,7 +358,7 @@ const styles = StyleSheet.create({
     homePageTabText : {
         color:"#ffffff",
         fontWeight:"900",
-        margin:10,
+        // margin:10,
         fontSize:16,
         borderBottomWidth:3,
         borderBottomColor:"#ffffff"
@@ -353,8 +368,17 @@ const styles = StyleSheet.create({
         fontWeight:"900",
         margin:10,
         fontSize:16,
+
+    },
+    homePageTabBtnSelect : {
         borderBottomWidth:3,
-        borderBottomColor:"#ffffff"
+        borderBottomColor:"#ffffff",
+        marginLeft:15,
+        marginRight:15,
+    },
+    homePageTabBtn : {
+        marginLeft:15,
+        marginRight:15,
     },
     forumBtn : {
         margin:10,height:80,alignItems:"center",

@@ -11,6 +11,7 @@ global.webServer = "http://local.suki-suki.me:8000/";
 // global.webServer = "https://sukisuki.org/";
 //引入组件
 import  home_page from "./src/view/home_page"
+import  user_center from "./src/view/user_center"
 class HomeScreen extends React.Component {
     render() {
         return (
@@ -21,19 +22,12 @@ class HomeScreen extends React.Component {
     }
 }
 
-class SettingsScreen extends React.Component {
-    render() {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Settings!</Text>
-            </View>
-        );
-    }
-}
+
 
 const TabNavigator = createBottomTabNavigator({
+
+    UserCenter: { screen: user_center },
     Home: { screen: home_page },
-    Settings: { screen: SettingsScreen },
 });
 
 export default createAppContainer(TabNavigator);
