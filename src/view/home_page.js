@@ -361,7 +361,8 @@ const styles = StyleSheet.create({
         // margin:10,
         fontSize:16,
         borderBottomWidth:3,
-        borderBottomColor:"#ffffff"
+        borderBottomColor:"#ffffff",
+        paddingBottom:5
     },
     homePageTabTextSelected :{
         color:"#ffffff",
