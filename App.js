@@ -15,6 +15,7 @@ global.webServer = "http://local.suki-suki.me:8000/";
 import  home_page from "./src/view/home_page"
 import  user_center from "./src/view/user_center"
 import  user_message from "./src/view/user_message"
+import  _reply_view from "./src/view/reply_view"
 class HomeScreen extends React.Component {
     render() {
         return (
@@ -30,6 +31,7 @@ class HomeScreen extends React.Component {
 const TabNavigator = createBottomTabNavigator({
 
 
+    reply_view: { screen: _reply_view },
     UserMessage: { screen: user_message },
     UserCenter: { screen: user_center },
     Home: { screen: home_page },

@@ -59,9 +59,9 @@ export default class user_message extends Component  {
                     <TouchableOpacity style={styles.touchableItem}>
                         <View style={{
                             backgroundColor:"#F5A687",
-                            width:30,
-                            height:30,
-                            borderRadius:30,
+                            width:40,
+                            height:40,
+                            borderRadius:40,
                             alignItems:"center",}}>
                             <Image   source={source=require('../image/pinglun.png')}
                                      style={styles.touchableImage} />
@@ -72,9 +72,9 @@ export default class user_message extends Component  {
                     <TouchableOpacity style={styles.touchableItem}>
                         <View style={{
                             backgroundColor:"#F6D68A",
-                            width:30,
-                            height:30,
-                            borderRadius:30,
+                            width:40,
+                            height:40,
+                            borderRadius:40,
                             alignItems:"center",}}>
                             <Image   source={source=require('../image/atme.png')}
                                      style={styles.touchableImage} />
@@ -85,26 +85,35 @@ export default class user_message extends Component  {
                     <TouchableOpacity style={styles.touchableItem}>
                         <View style={{
                             backgroundColor:"#FAA8B2",
-                            width:30,
-                            height:30,
-                            borderRadius:30,
+                            width:40,
+                            height:40,
+                            borderRadius:40,
                             alignItems:"center",}}>
                             <Image   source={source=require('../image/heartw.png')}
-                                     style={styles.touchableImage} />
+                                     style={{width   : 20,
+                                         height  : 15,
+                                         marginTop:13}} />
                         </View>
 
                         <Text style={styles.touchableText}>点赞</Text>
                     </TouchableOpacity>
                 </View>
 
-                <View style={{marginTop:10,height:height-350}}>
+                <View style={{marginTop:10,height:height-350,}}>
                     {/*即时聊天*/}
                     <TouchableOpacity style={styles.touchableItem}>
                         <Image   source={source=require('../image/noavatar.gif')}
-                                 style={{width:30,height:30,borderRadius:15,   }} />
+                                 style={{width:45,height:45,borderRadius:22.5,   }} />
 
-                        <View>
+                        <View style={{marginLeft:15}}>
+                            <View style={{flexDirection:"row",justifyContent:"space-between",}}>
+                                <Text style={{color:global.mainFontColor, fontSize:15}}>用户名</Text>
+                                <Text style={{color:"#999999",fontSize:12,}}>一分钟前</Text>
+                            </View>
 
+                            <Text
+                                style={{color:"#999999",fontSize:12,marginTop:13,width:width-105}}
+                                numberOfLines={1} >交个朋友吗交个朋友吗交个朋友吗交个朋友吗交个朋友吗交个朋友吗交个朋友吗交个朋友吗交个朋友吗交个朋友吗交个朋友吗交个朋友吗</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -147,16 +156,18 @@ const styles = StyleSheet.create({
         padding:10,
         paddingLeft:25,
         backgroundColor:"#fff",
-        borderBottomWidth :1,
-        borderColor:"#F6F6F6"
+        borderBottomWidth :0,
+        borderColor:"#F6F6F6",
+        paddingTop:10,
+        paddingBottom:10
     },
     touchableImage : {
-        width   : 15,
-        height  : 15,
-        marginTop:7.5
+        width   : 20,
+        height  : 20,
+        marginTop:10
     },
     touchableText : {
-        padding:7.5,
+        padding:12,
         marginLeft:10,
         color:"#7B6164",
         fontWeight:"800",
