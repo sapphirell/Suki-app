@@ -21,6 +21,7 @@ import  home_page from "./src/view/home_page"
 import  user_center from "./src/view/user_center"
 import  user_message from "./src/view/user_message"
 import  _reply_view from "./src/view/reply_view"
+import  _thread_view from "./src/view/thread_view"
 
 const MessageStack = createStackNavigator({
     UserMessage : user_message ,
@@ -33,12 +34,12 @@ const MessageStack = createStackNavigator({
 
 const TabNavigator = createBottomTabNavigator({
     // tab: {screen : Tab},
-    // reply_view: { screen: _reply_view },
+    thread_view: { screen: _thread_view },
     "首页": { screen: home_page },
     "消息": MessageStack,
     "我的": { screen: user_center },
-
 },{
+
     defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
             const { routeName } = navigation.state;
@@ -93,9 +94,26 @@ const TabNavigator = createBottomTabNavigator({
                     }
                 </View>
             }
+            // else if(routeName === 'thread_view')
+            // {
+            //     return  <View style={{width:25,height:28}}>
+            //         {
+            //             focused
+            //                 ? <Image   source={source=require('./src/image/me_pre.png')}
+            //                            style={{width   : 28,
+            //                                height  : 28,
+            //                            }} />
+            //                 : <Image   source={source=require('./src/image/me.png')}
+            //                            style={{
+            //                                width   : 28,
+            //                                height  : 28,
+            //                            }} />
+            //         }
+            //     </View>
+            // }
             else
             {
-
+                return <View/>
             }
 
         },
