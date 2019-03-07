@@ -8,7 +8,7 @@ import {
     StyleSheet,
     FlatList,
     AsyncStorage,
-
+    navigate,
 } from 'react-native';
 import SmartView from "../model/SmartView";
 let {height, width} = Dimensions.get('window');
@@ -38,7 +38,31 @@ export default class reply_view extends Component  {
                 </View>
                 {/*评论列表*/}
                 <View>
+                    <View style={{backgroundColor:"#fff",marginTop:10,marginBottom:10,
+                        paddingLeft: 20,paddingRight: 20,paddingTop:10,paddingBottom:10}}>
+                        <View style={{flexDirection:"row",}}>
+                            <Image   source={source=require('../image/noavatar.gif')}
+                                     style={{width:45,height:45,borderRadius:22.5,   }} />
+                            <View style={{flexDirection:"row",justifyContent:"space-between", flex:1, padding:10,paddingTop:15}}>
+                                <Text style={{color:global.mainFontColor, fontSize:15}}>用户名</Text>
+                                <Text style={{color:"#999999",fontSize:12,}}>一分钟前</Text>
+                            </View>
+                        </View>
 
+                        <View style={{width:width-100,paddingTop:10}}>
+                            <Text  numberOfLines={3} style={{width:width-40,fontSize:15, color:global.mainFontColor,lineHeight:19}}>
+                                好久不见好久不见好久不见好久不见 好久不见好久不见好久不见好久不见好久不 好久不见好久不见好久不见好久不见好久不好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见好久不见
+                            </Text>
+                        </View>
+                        <View style={{width:width-45,padding:10, marginTop: 10,backgroundColor:"#F5F5F5",
+                            borderRadius:5
+                        }}>
+                            <Text  numberOfLines={3} style={{fontSize:15, color:"#999999",lineHeight:19}}>
+                                评论我的主题：蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤蛤
+                            </Text>
+                        </View>
+
+                    </View>
                 </View>
             </SmartView>
         )

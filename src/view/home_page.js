@@ -220,7 +220,7 @@ export default class home_page extends Component  {
                         </View>
                         <TouchableOpacity>
                             <Image source={source = require('../image/search.png')}
-                                   style={{width: 20, height:20,marginRight:10}}
+                                   style={{width: 20, height:20,marginRight:10,marginLeft:30}}
                             />
                         </TouchableOpacity>
                     </View>

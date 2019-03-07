@@ -8,7 +8,7 @@ import {
     StyleSheet,
     FlatList,
     AsyncStorage,
-
+    navigate,
 } from 'react-native';
 import SmartView from "../model/SmartView";
 let {height, width} = Dimensions.get('window');
@@ -25,7 +25,7 @@ export default class user_message extends Component  {
 
     }
     render() {
-
+        const {state , goBack ,navigate} = this.props.navigation;
         return (
             <SmartView  barStyle="default">
                 <View style={{backgroundColor:global.mainColor, padding:10,flexDirection: "row",
@@ -56,7 +56,14 @@ export default class user_message extends Component  {
                 </View>
                 <View style={{marginTop:10}}>
                     {/*三个按钮*/}
-                    <TouchableOpacity style={styles.touchableItem}>
+                    <TouchableOpacity style={styles.touchableItem}
+                                      onPress={
+                                          () =>navigate('reply_view',{
+                                              // plid: item.plid,
+                                              // callback : () => { this.getUserCenterData(); }
+                                          })
+                                      }
+                    >
                         <View style={{
                             backgroundColor:"#F5A687",
                             width:40,
