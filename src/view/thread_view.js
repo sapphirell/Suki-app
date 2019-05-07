@@ -40,7 +40,7 @@ export default class thread_view extends Component {
     async componentWillMount() {
         await this.setState({pid:80176});
         let forumData = "tid=80173" ;
-        this.getThreadData(forumData);
+        // this.getThreadData(forumData);
         return ;
         if (this.props.navigation.state.params.pid)
         {
@@ -81,7 +81,7 @@ export default class thread_view extends Component {
         // return (<View><Text>?</Text></View>);
 
         return (
-            <View style={{width:width}}>
+            <View style={{width:width }}>
 
                 {
                     data ? data.dataArr.map(
@@ -98,7 +98,7 @@ export default class thread_view extends Component {
                                             (data.regQuote.test(content) === true ?
                                                     <Text style={{width:width,paddingRight:30,fontStyle:"italic",fontSize:11,color:"#606060"}}> 回复 @ {content.replace(/\[blockquote[\w\W]*?\]/,'').replace(/\[\/blockquote\]/,'').replace(/\[quote[\w\W]*?\]/,'').replace(/\[\/quote\]/,'')}</Text>
                                                     :
-                                                    <Text  style={{width:width,paddingRight:30,}}>{content}</Text>
+                                                    <Text  style={{width:width,paddingRight:30,color:global.mainFontColor}}>{content}</Text>
                                             )
                                     }
                                 </View>
@@ -284,7 +284,7 @@ export default class thread_view extends Component {
     };
     headView = () => {
         return (
-            <View>
+            <View style={{backgroundColor:"#FFF", padding:20}}>
                 {JSON.stringify(this.state.thread_data) == '{}' ?
                     <View style={{flexDirection:"row"}}>
                         <Image
@@ -299,19 +299,17 @@ export default class thread_view extends Component {
                             source={{
                                 uri:  this.state.thread_data.avatar,
                             }}
-                            style={{width:40,height:40,borderRadius:20}}
+                            style={{width:40,height:40,borderRadius:20,marginRight:10}}
                         />
-                        <View>
+                        <View style={{}}>
                             <Text style={{color:global.mainFontColor}}>{this.state.thread_data.author}</Text>
-                            <Text style={{ color:"#999999",fontSize:13}}>1楼 | {this.state.thread_data.dateline}</Text>
+                            <Text style={{ color:"#999999",fontSize:13,marginTop:5}}>1楼 | {this.state.thread_data.dateline}</Text>
                         </View>
                     </View>
                 }
-
-
                 {
                     <View style={{flexDirection:"row",width:width-90,flexWrap:"wrap",marginLeft:8}} >
-                        <Text style={{color:mainFontColor,fontSize:17,fontWeight:"700"}}>{this.state.thread_data.subject}</Text>
+                        <Text style={{color:mainFontColor,fontSize:17,fontWeight:"700",marginTop:10,marginBottom:10}}>{this.state.thread_data.subject}</Text>
                         {
                             this.state.post_data && this.imageTextList(this.state.post_data[0])
                         }
@@ -331,8 +329,11 @@ export default class thread_view extends Component {
         fid:0,
         subject:'',
         offsetForPlatform:50,
-        keyboardVerticalOffset : Platform.OS === 'ios' ? 50 : -190,//键盘抬起高度
+        keyboardVerticalOffset : 0,//键盘抬起高度基础值
+        floatBarHeight :0 ,//浮动框高度
+        floatBtn:0,//浮动按钮（上传图片）的高度偏移量
         textInputHeight : 30 ,// 输入框高度
+        textInputFocus:false,
         upload_status : 'free',
         show_more : false, //是否显示更多菜单
         show_notice :false,
@@ -369,7 +370,7 @@ export default class thread_view extends Component {
                             renderItem= {
                                 ({item}) => {
                                     return (
-                                        <View style={{marginBottom:10,backgroundColor:"#fff",paddingTop:15}} >
+                                        <View style={{marginBottom:5,backgroundColor:"#fff",paddingTop:15}} >
                                             {item.position !== 1 &&
                                             <View style={{width:width,paddingLeft:20}}>
                                                 <View style={{flexDirection:"row",width:width}} >
@@ -379,13 +380,13 @@ export default class thread_view extends Component {
                                                         })
                                                     }}>
                                                         <Image source={{uri: item.avatar}}
-                                                               style={{width: 35, height: 35, borderRadius: 17.5,marginRight:10}}/>
+                                                               style={{width: 40, height: 40, borderRadius: 20,marginRight:5}}/>
                                                     </TouchableOpacity>
 
                                                     <View style={{marginLeft:5,width:width-50,}}>
-                                                        <Text style={{textAlign:"left",width:width}}>{item.author}</Text>
+                                                        <Text style={{textAlign:"left",width:width, color:global.mainFontColor}}>{item.author}</Text>
                                                         <View style={{marginTop:5,flexDirection:"row",width:width}}>
-                                                            <Text>{item.postdate}</Text>
+                                                            <Text style={{ color:"#999999",fontSize:13,}}>{item.position}楼 | {this.state.thread_data.dateline}</Text>
                                                             <TouchableOpacity style={{flexDirection:"row",width:60}}
                                                                               onPress={()=>{
                                                                                   this.refs["INPUT"].focus();
@@ -412,46 +413,72 @@ export default class thread_view extends Component {
                     }
                 </View>
 
-
-
-                <KeyboardAvoidingView style={styles.floatBar}
+                <KeyboardAvoidingView style={{
+                    backgroundColor:"#fff",
+                    borderColor:"#fff",
+                    borderTopWidth:1,
+                    borderBottomWidth:1,
+                    width:width,
+                    height:45 + this.state.floatBarHeight,
+                    bottom:this.state.floatBarHeight,
+                    // height:80,
+                    flexDirection:"row",
+                    shadowOffset: {width: 2, height: -3},
+                    shadowOpacity: 0.5,
+                    shadowRadius: 3,
+                    shadowColor: "#cacaca",
+                    elevation: 2,
+                }}
                                       behavior="padding"
-                                      keyboardVerticalOffset={this.state.keyboardVerticalOffset}
+                                      keyboardVerticalOffset={ (Platform.OS === 'ios' ? 80 : -160) + this.state.keyboardVerticalOffset}
+                                      // keyboardVerticalOffset={ this.state.keyboardVerticalOffset}
                 >
-                    <View style={{width:width,flexDirection:"row"}}>
-                        <TextInput
-                            multiline={true}
-                            value={this.state.message}
-                            ref={"INPUT"}
-                            underlineColorAndroid="transparent"
-                            onContentSizeChange={(event) => {
-                                if( event.nativeEvent.contentSize.height  > 30 && event.nativeEvent.contentSize.height  < 60 )
-                                {
-                                    // maxHeight = event.nativeEvent.contentSize.height > 50 ? 50 :event.nativeEvent.contentSize.height
+                    <View style={{width:width}}>
+                        <View style={{flexDirection:"row"}}>
+                            <TextInput
+                                multiline={true}
+                                value={this.state.message}
+                                ref={"INPUT"}
+                                underlineColorAndroid="transparent"
+                                onContentSizeChange={(event) => {
+                                    var lines =   Math.round(Math.round(event.nativeEvent.contentSize.height) / 17) < 5 ?
+                                        Math.round(Math.round(event.nativeEvent.contentSize.height) / 17) : 5
                                     this.setState({
-                                        textInputHeight: event.nativeEvent.contentSize.height,
-                                        keyboardVerticalOffset : this.state.keyboardVerticalOffset + event.nativeEvent.contentSize.height - 30
+                                        textInputHeight: (lines + 1) * 17,
+                                        floatBarHeight : lines * 17,
+                                        keyboardVerticalOffset : lines * 17,
+                                        floatBtn : - lines * 17,
                                     })
-                                }
-                            }}
-                            // onChangeText={(text) => {message = text}}
-                            onChangeText={(text) => {
-                                if(Platform.OS==='android'){
-                                    //如果是android平台
+                                    console.log(lines)
+                                }}
+                                // onChangeText={(text) => {message = text}}
+                                onChangeText={(text) => {
                                     this.setState({message:text});
-                                }
-                                message = text
-                            }}
-                            style={{paddingVertical: 0,backgroundColor:"#f5f5f5",height:this.state.textInputHeight, maxHeight:60,marginTop:7,borderRadius:3,
-                                borderWidth:0,
-                                width:width-85,
-                                marginRight:10,paddingLeft:5,
-                                marginLeft:5,
-                            }}/>
-                        <TouchableOpacity style={{width:35,height:35,marginLeft:3}} onPress={this.submitMessage}>
-                            <Image  source={source=require('../image/reply.png')}
-                                    style={styles.floatButton}/>
-                        </TouchableOpacity>
+                                }}
+                                onFocus ={()=>this.setState({textInputFocus:true})}
+                                onBlur  ={()=>this.setState({textInputFocus:false})}
+                                style={{paddingVertical: 0,backgroundColor:"#f5f5f5",height:this.state.textInputHeight,
+                                    marginTop:7,borderRadius:3, fontSize:14, borderWidth:0, width:width-55,
+                                    marginRight:10,paddingLeft:5, marginLeft:5,
+                                }}/>
+                            <TouchableOpacity style={{width:35,height:35,marginLeft:3}} onPress={this.submitMessage}>
+                                <Text style={{fontSize:13, color:"#EF8A96",fontWeight:"800",marginTop:15}}>回复</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {
+                            this.state.textInputFocus &&
+                            <View style={{marginTop:5,marginLeft:5,position:"absolute",bottom:-80 + this.state.floatBtn}}>
+                                <TouchableOpacity style={{width:35,height:35,marginLeft:3}} onPress={this.submitMessage}>
+                                    <Image
+                                        source={source=require('../image/upimg.png')}
+                                        style={{width: 20, height: 20}}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
+                        }
+
+
                         {/*<UploadImage  style={{width:25,height:25,marginRight:5,paddingTop:5,alignItems:"center"}}  update_upload_status={this.update_upload_status} />*/}
 
                     </View>
@@ -488,7 +515,7 @@ const styles = StyleSheet.create({
         borderTopWidth:1,
         borderBottomWidth:1,
         width:width,
-        height:45,
+        height:45 ,
         bottom:0,
         // left:(width-180)/2,
         // borderRadius:5,
