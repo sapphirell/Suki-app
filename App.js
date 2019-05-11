@@ -15,13 +15,15 @@ global.mainColor = "#EF8A96";
 global.mainFontColor = "#7B6164";
 //程序域名
 global.webServer = "http://local.suki-suki.me:8000/"; //本地测试
-global.webServer = "https://sukisuki.org/";
+// global.webServer = "https://sukisuki.org/";
 //引入组件
 import  home_page from "./src/view/home_page"
 import  user_center from "./src/view/user_center"
 import  user_message from "./src/view/user_message"
 import  _reply_view from "./src/view/reply_view"
 import  _thread_view from "./src/view/thread_view"
+import  _login_view from "./src/view/login"
+import  _register_view from "./src/view/register"
 
 const MessageStack = createStackNavigator({
     UserMessage : user_message ,
@@ -42,7 +44,8 @@ const HomePageStack = createStackNavigator({
 const TabNavigator = createBottomTabNavigator({
     // tab: {screen : Tab},
     // thread_view: { screen: _thread_view },
-
+    // _login_view : _login_view,
+    _register_view : _register_view,
     "首页": HomePageStack,
     "消息": MessageStack,
     "我的": { screen: user_center },
@@ -56,15 +59,15 @@ const TabNavigator = createBottomTabNavigator({
                 return  <View style={{width:25,height:25}}>
                             {
                                 focused
-                                ? <Image   source={source=require('./src/image/home_pre.png')}
-                                                style={{width   : 25,
-                                                    height  : 25,
-                                                }} />
-                                : <Image   source={source=require('./src/image/home.png')}
-                                           style={{
+                                ? <Image source={source=require('./src/image/home_pre.png')}
+                                         style={{width   : 25,
+                                                height  : 25,
+                                         }} />
+                                : <Image source={source=require('./src/image/home.png')}
+                                         style={{
                                                width   : 25,
                                                height  : 25,
-                                           }} />
+                                         }} />
                             }
                 </View>
             }
@@ -102,23 +105,23 @@ const TabNavigator = createBottomTabNavigator({
                     }
                 </View>
             }
-            // else if(routeName === 'thread_view')
-            // {
-            //     return  <View style={{width:25,height:28}}>
-            //         {
-            //             focused
-            //                 ? <Image   source={source=require('./src/image/me_pre.png')}
-            //                            style={{width   : 28,
-            //                                height  : 28,
-            //                            }} />
-            //                 : <Image   source={source=require('./src/image/me.png')}
-            //                            style={{
-            //                                width   : 28,
-            //                                height  : 28,
-            //                            }} />
-            //         }
-            //     </View>
-            // }
+            else if(routeName === '_register_view')
+            {
+                return  <View style={{width:25,height:28}}>
+                    {
+                        focused
+                            ? <Image   source={source=require('./src/image/me_pre.png')}
+                                       style={{width   : 28,
+                                           height  : 28,
+                                       }} />
+                            : <Image   source={source=require('./src/image/me.png')}
+                                       style={{
+                                           width   : 28,
+                                           height  : 28,
+                                       }} />
+                    }
+                </View>
+            }
             else
             {
                 return <View/>

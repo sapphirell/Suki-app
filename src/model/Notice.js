@@ -35,8 +35,8 @@ export default class Notice extends Component  {
                     shadowOffset: {width: 0, height: 5},
                     shadowOpacity: 0.8,
                     shadowRadius: 5,
-                    borderColor:"#ee7489",
-                    borderWidth:3,
+                    // borderColor:"#ee7489",
+                    // borderWidth:3,
                     shadowColor: "#0202025c",
                     backgroundColor:"#ffffffdb",
                     borderRadius:10,
@@ -45,11 +45,11 @@ export default class Notice extends Component  {
 
                 }}>
 
-                    <Text style={{width:width-150,paddingLeft:10,paddingRight:10,height:75,color:"#ee7489",paddingTop:20,textAlign:"center",fontSize:16}}>{this.props.message ? this.props.message : "提醒" }</Text>
+                    <Text style={{width:width-150,paddingLeft:10,paddingRight:10,height:75,color:"#ee7489",fontWeight:"800",paddingTop:20,textAlign:"center",fontSize:16}}>{this.props.message ? this.props.message : "提醒" }</Text>
                     <TouchableOpacity style={{width:width-150,alignItems:"center",flexDirection:"row"}} onPress={this.props.fn}>
                         <Text style={{color:"#ee7489",fontSize:17,marginLeft:70,
                         }}>了解了</Text>
-                        <Image  source={source=require('../image/makesure.png')} style={{width:25,height:25,marginLeft:5}} />
+                        <Image  source={source=require('../image/makesure.png')} style={{width:25,fontWeight:"800",height:25,marginLeft:5}} />
                     </TouchableOpacity>
                 </View>
 
