@@ -1,4 +1,4 @@
-
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 import React, { Component } from 'react';
 import {
     Text,
@@ -191,10 +191,12 @@ export default class home_page extends Component  {
     // };
 
     render() {
-
+        console.log(this.props.navigation)
+        const { state , navigate, goBack ,props ,push} = this.props.navigation;
         return (
                 <SmartView
                     // barStyle="light-content"
+                    navigation={this.props.navigation}
                 >
                     <View style={{backgroundColor:global.mainColor, padding:10,flexDirection: "row",justifyContent:"space-between",
                         shadowOffset: {width: 2, height: 5},
@@ -297,7 +299,11 @@ export default class home_page extends Component  {
                                 ({item}) => {
                                     return (
                                         <View style={{padding:10,marginBottom:5,backgroundColor:"#ffffff"}} >
-                                            <TouchableOpacity onPress={()=>{}} style={{flexDirection:"row",width:main_width}}>
+                                            <TouchableOpacity onPress={()=>{
+                                                this.props.navigation.push('_thread_view',{
+                                                    tid: item.tid,
+                                                })
+                                            }} style={{flexDirection:"row",width:main_width}}>
                                                 <Image source={{uri: item.avatar}} style={{width: 40, height: 40,
                                                     margin:5,borderRadius:20
                                                 }} />
@@ -313,9 +319,16 @@ export default class home_page extends Component  {
                                             </TouchableOpacity>
                                             <View style={{backgroundColor:"#fff",alignItems:"center",width:main_width}}>
                                                 { item.preview != "" &&
-                                                <Text numberOfLines={2} style={{color:"#7B6164",fontWeight:"600",padding:5,marginTop:10,width:main_width,fontSize:12}}>
-                                                    {item.preview}
-                                                </Text>
+                                                <TouchableOpacity onPress={()=>{
+                                                    this.props.navigation.push('_thread_view',{
+                                                        tid: item.tid,
+                                                    })
+                                                }}>
+                                                    <Text numberOfLines={2} style={{color:"#7B6164",fontWeight:"600",padding:5,marginTop:10,width:main_width,fontSize:12}}>
+                                                        {item.preview}
+                                                    </Text>
+                                                </TouchableOpacity>
+
                                                 }
 
                                                 <View style={{width:main_width,flexDirection:"row"}}>
@@ -330,9 +343,6 @@ export default class home_page extends Component  {
                                                         )
                                                     }
                                                 </View>
-
-
-
                                             </View>
 
 

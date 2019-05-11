@@ -15,7 +15,7 @@ global.mainColor = "#EF8A96";
 global.mainFontColor = "#7B6164";
 //程序域名
 global.webServer = "http://local.suki-suki.me:8000/"; //本地测试
-// global.webServer = "https://sukisuki.org/";
+global.webServer = "https://sukisuki.org/";
 //引入组件
 import  home_page from "./src/view/home_page"
 import  user_center from "./src/view/user_center"
@@ -25,17 +25,25 @@ import  _thread_view from "./src/view/thread_view"
 
 const MessageStack = createStackNavigator({
     UserMessage : user_message ,
-    reply_view : _reply_view
+},{
+    //screen模式才可以隐藏导航header,none为全局隐藏
+    headerMode: 'none'
+});
+
+const HomePageStack = createStackNavigator({
+    home_page : home_page ,
 
 },{
     //screen模式才可以隐藏导航header,none为全局隐藏
     headerMode: 'none'
 });
 
+
 const TabNavigator = createBottomTabNavigator({
     // tab: {screen : Tab},
-    thread_view: { screen: _thread_view },
-    "首页": { screen: home_page },
+    // thread_view: { screen: _thread_view },
+
+    "首页": HomePageStack,
     "消息": MessageStack,
     "我的": { screen: user_center },
 },{
@@ -124,8 +132,20 @@ const TabNavigator = createBottomTabNavigator({
         style : {
             borderTopColor:"#ddd",
         }
-    },
+    }
 
 });
-
-export default createAppContainer(TabNavigator);
+const AppNavigator = createStackNavigator(
+    {
+        TabNavigator,
+        _thread_view: {
+            screen : _thread_view ,
+        },
+        // reply_view : _reply_view
+    },
+    {
+        //screen模式才可以隐藏导航header,none为全局隐藏
+        headerMode: 'none'
+    }
+);
+export default createAppContainer(AppNavigator);

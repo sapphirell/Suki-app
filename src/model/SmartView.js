@@ -43,7 +43,7 @@ export default class SmartView extends Component  {
                     width:width,
                     flex:1,
                     height:height,
-                    backgroundColor:"#fafafa",
+                    backgroundColor:this.props.bgColor ? this.props.borderColor :"#fafafa",
                     borderTopColor:this.props.borderColor ? this.props.borderColor :global.mainColor,
                     borderTopWidth:this.state.paddingTop,
                     paddingBottom:this.state.paddingBottom

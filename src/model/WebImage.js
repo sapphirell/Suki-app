@@ -17,7 +17,7 @@ let {height, width} = Dimensions.get('window');
 export default class WebImage extends Component {
 
     state = {
-        width:width-40,
+        width:width-50,
         height:150,
         // uri:""
         // uri:"https://image.fantuanpu.com/upload/20180806/2358ff69a0af12eb179e4f63044dc603.gif"
@@ -50,8 +50,8 @@ export default class WebImage extends Component {
         Image.getSize(uri, (imgWidth, imgHeight) => {
             if (imgWidth > width)
             {
-                imgHeight = imgHeight * width / (imgWidth - 40);
-                imgWidth = width -40;
+                imgHeight = imgHeight * width / (imgWidth - 50);
+                imgWidth = width -50;
             }
             this.setState({width:imgWidth, height:imgHeight , uri:uri});
         });

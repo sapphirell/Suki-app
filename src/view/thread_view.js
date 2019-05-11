@@ -40,9 +40,8 @@ export default class thread_view extends Component {
     async componentWillMount() {
         await this.setState({pid:80176});
         let forumData = "tid=80173" ;
-        // this.getThreadData(forumData);
-        return ;
-        if (this.props.navigation.state.params.pid)
+        this.getThreadData(forumData);
+        if (this.props.navigation.state.params && this.props.navigation.state.params.pid)
         {
             await this.setState({pid:this.props.navigation.state.params.pid});
             let forumData = "pid=" + this.props.navigation.state.params.pid ;
@@ -81,24 +80,21 @@ export default class thread_view extends Component {
         // return (<View><Text>?</Text></View>);
 
         return (
-            <View style={{width:width }}>
-
+            <View style={{width:width-15}}>
                 {
                     data ? data.dataArr.map(
                         (content) => {
                             // console.log(content)
                             return (
-
-                                <View key={ typeof(content)=== 'string' ? content  : content.toString() }  >
-
+                                <View key={typeof(content)=== 'string' ? content : content.toString() }  >
                                     {
                                         data.regImg.test(content) === true ?
                                             <WebImage style={{zIndex:1}} uri = { content.replace(/\[img.*?\]/,'').replace(/\[\/img\]/,'')} />
                                             :
                                             (data.regQuote.test(content) === true ?
-                                                    <Text style={{width:width,paddingRight:30,fontStyle:"italic",fontSize:11,color:"#606060"}}> 回复 @ {content.replace(/\[blockquote[\w\W]*?\]/,'').replace(/\[\/blockquote\]/,'').replace(/\[quote[\w\W]*?\]/,'').replace(/\[\/quote\]/,'')}</Text>
+                                                    <Text style={{width:width-10,paddingRight:30,fontStyle:"italic",fontSize:11,color:"#606060"}}> 回复 @ {content.replace(/\[blockquote[\w\W]*?\]/,'').replace(/\[\/blockquote\]/,'').replace(/\[quote[\w\W]*?\]/,'').replace(/\[\/quote\]/,'')}</Text>
                                                     :
-                                                    <Text  style={{width:width,paddingRight:30,color:global.mainFontColor}}>{content}</Text>
+                                                    <Text  style={{width:width-10,paddingRight:30,color:global.mainFontColor}}>{content}</Text>
                                             )
                                     }
                                 </View>
@@ -308,7 +304,7 @@ export default class thread_view extends Component {
                     </View>
                 }
                 {
-                    <View style={{flexDirection:"row",width:width-90,flexWrap:"wrap",marginLeft:8}} >
+                    <View style={{flexDirection:"row",width:width-90,flexWrap:"wrap",marginLeft:0 ,marginTop:10}} >
                         <Text style={{color:mainFontColor,fontSize:17,fontWeight:"700",marginTop:10,marginBottom:10}}>{this.state.thread_data.subject}</Text>
                         {
                             this.state.post_data && this.imageTextList(this.state.post_data[0])
@@ -346,7 +342,7 @@ export default class thread_view extends Component {
         // console.log(this.state.post_data);
 
         return (
-            <SmartView style={styles.container} colorType="back" borderColor="#ffffff" >
+            <SmartView style={styles.container} colorType="back" borderColor="#ffffff" bgColor="#fff">
                 { this.state.show_notice && <Notice message={this.state.show_notice} fn={this.state.notice_fn} />}
                 <View style={{backgroundColor:"#ffffff",flexDirection:"row", padding:10}}>
                     <TouchableOpacity onPress={()=>goBack()}>
@@ -356,7 +352,7 @@ export default class thread_view extends Component {
 
                     <Text style={{color:global.mainFontColor,textAlign:"center",fontSize:16,fontWeight:"800",flex:1}}>评论</Text>
                 </View>
-                <View style={{flex:1,backgroundColor:"#F5F5F5"}}>
+                <View style={{flex:1,backgroundColor:"#F5F5F5", }}>
                     {
                         this.state.post_data &&
                         <FlatList
@@ -384,14 +380,31 @@ export default class thread_view extends Component {
                                                     </TouchableOpacity>
 
                                                     <View style={{marginLeft:5,width:width-50,}}>
-                                                        <Text style={{textAlign:"left",width:width, color:global.mainFontColor}}>{item.author}</Text>
+                                                        <View style={{flexDirection:"row"}}>
+                                                            <Text style={{textAlign:"left",width:width-100, color:global.mainFontColor}}>{item.author}</Text>
+                                                            <TouchableOpacity>
+                                                                <Image source={source=require('../image/more-z.png')}
+                                                                       style={{width:20,height:6,marginLeft:7,right:10,top:2}} />
+                                                            </TouchableOpacity>
+
+                                                        </View>
+
                                                         <View style={{marginTop:5,flexDirection:"row",width:width}}>
                                                             <Text style={{ color:"#999999",fontSize:13,}}>{item.position}楼 | {this.state.thread_data.dateline}</Text>
                                                             <TouchableOpacity style={{flexDirection:"row",width:60}}
                                                                               onPress={()=>{
                                                                                   this.refs["INPUT"].focus();
                                                                                   // item.map();
-                                                                                  this.setState({'message':"[quote]"+item.message+"[/quote]"})
+                                                                                  if (item.message.length < 30)
+                                                                                  {
+                                                                                      var str = item.message.slice(0,-2).substr(0,item.message.length)
+                                                                                  }
+                                                                                  else
+                                                                                  {
+                                                                                      var str = item.message.slice(0,-2).substr(0,30) + "..."
+                                                                                  }
+
+                                                                                  this.setState({'message':"[quote]"+str+"[/quote]\r\n"})
                                                                               }}>
                                                                 <Image source={source=require('../image/reply-b.png')}
                                                                        style={{width:12,height:12,marginLeft:7,position:"relative",top:2}} />
@@ -400,7 +413,7 @@ export default class thread_view extends Component {
                                                         </View>
                                                     </View>
                                                 </View>
-                                                <View style={{marginTop:10}}>
+                                                <View style={{marginTop:10,paddingRight:10,paddingBottom:15}}>
                                                     { this.imageTextList(item) }
                                                 </View>
                                             </View>
@@ -423,7 +436,7 @@ export default class thread_view extends Component {
                     bottom:this.state.floatBarHeight,
                     // height:80,
                     flexDirection:"row",
-                    shadowOffset: {width: 2, height: -3},
+                    shadowOffset: {width: 2, height: -5},
                     shadowOpacity: 0.5,
                     shadowRadius: 3,
                     shadowColor: "#cacaca",
@@ -492,7 +505,8 @@ export default class thread_view extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        zIndex:99
+        zIndex:99,
+        paddingBottom:30
         // flex: 1,
         // justifyContent: 'center',
         // height:height,
