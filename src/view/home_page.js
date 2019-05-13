@@ -284,7 +284,7 @@ export default class home_page extends Component  {
                             }}
                             data={this.state.threads}
                             keyExtractor = { (item) =>  "key" + item.tid}
-                            style={{marginTop:10,flex:1,backgroundColor:"#fafafa",height:height,}}
+                            style={{flex:1,backgroundColor:"#fafafa",height:height,}}
                             // numColumns={5}
                             // showsHorizontalScrollIndicator= {false}//隐藏水平滚动条
                             showsVerticalScrollIndicator= {false}//隐藏竖直滚动条

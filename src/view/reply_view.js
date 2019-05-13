@@ -37,7 +37,7 @@ export default class reply_view extends Component  {
                     <Text style={{color:global.mainFontColor,textAlign:"center",fontSize:16,fontWeight:"800",flex:1}}>评论</Text>
                 </View>
                 {/*评论列表*/}
-                <View>
+                <View style={{}}>
                     <View style={{backgroundColor:"#fff",marginTop:10,marginBottom:10,
                         paddingLeft: 20,paddingRight: 20,paddingTop:10,paddingBottom:10}}>
                         <View style={{flexDirection:"row",}}>

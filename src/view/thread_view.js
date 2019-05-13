@@ -358,7 +358,7 @@ export default class thread_view extends Component {
                         <FlatList
                             data={this.state.post_data}
                             ListHeaderComponent={() => this.headView(1)}
-                            style={{zIndex:1,paddingTop:5,marginTop:5 }}
+                            style={{zIndex:1}}
                             keyExtractor = {  (item) => item.pid.toString() }
                             onEndReached={this.getMorePost}
                             onEndReachedThreshold={0.01}
