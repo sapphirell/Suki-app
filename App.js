@@ -14,8 +14,8 @@ global.mainColor = "#EF8A96";
 //通用文字色调（土色）
 global.mainFontColor = "#7B6164";
 //程序域名
-global.webServer = "http://local.suki-suki.me:8000/"; //本地测试
-// global.webServer = "https://sukisuki.org/";
+// global.webServer = "http://local.suki-suki.me:8000/"; //本地测试
+global.webServer = "https://sukisuki.org/";
 //引入组件
 import  home_page from "./src/view/home_page"
 import  user_center from "./src/view/user_center"
@@ -44,7 +44,7 @@ const HomePageStack = createStackNavigator({
 const TabNavigator = createBottomTabNavigator({
     // tab: {screen : Tab},
     // thread_view: { screen: _thread_view },
-    // _login_view : _login_view,
+    _login_view : _login_view,
     _register_view : _register_view,
     "首页": HomePageStack,
     "消息": MessageStack,
