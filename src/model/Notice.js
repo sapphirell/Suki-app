@@ -49,7 +49,7 @@ export default class Notice extends Component  {
                     <TouchableOpacity style={{width:width-150,alignItems:"center",flexDirection:"row"}} onPress={this.props.fn}>
                         <Text style={{color:"#ee7489",fontSize:17,marginLeft:70,
                         }}>了解了</Text>
-                        <Image  source={source=require('../image/makesure.png')} style={{width:25,fontWeight:"800",height:25,marginLeft:5}} />
+                        <Image  source={source=require('../image/makesure.png')} style={{width:25,height:25,marginLeft:5}} />
                     </TouchableOpacity>
                 </View>
 

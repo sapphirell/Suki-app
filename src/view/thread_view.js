@@ -38,9 +38,9 @@ let message ;
 export default class thread_view extends Component {
 
     async componentWillMount() {
-        await this.setState({pid:80176});
-        let forumData = "tid=80173" ;
-        this.getThreadData(forumData);
+        // await this.setState({pid:80176});
+        // let forumData = "tid=80173" ;
+        // this.getThreadData(forumData);
         if (this.props.navigation.state.params && this.props.navigation.state.params.pid)
         {
             await this.setState({pid:this.props.navigation.state.params.pid});
